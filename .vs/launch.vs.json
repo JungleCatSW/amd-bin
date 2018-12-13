@@ -1,0 +1,12 @@
+{
+  "version": "0.2.1",
+  "defaults": {},
+  "configurations": [
+    {
+      "type": "default",
+      "project": "CMakeLists.txt",
+      "projectTarget": "amd-bin.exe (Debug\\amd-bin.exe)",
+      "name": "amd-bin.exe (Debug\\amd-bin.exe)"
+    }
+  ]
+}
