@@ -15,6 +15,10 @@ public:
     BinGen();
     bool generateBinary(std::string kernel_path, std::string bin_name);
 
+private:
+	void createContext();
+	void buildProgram();
+	cl_platform_id m_platform = NULL;
 };
 
 

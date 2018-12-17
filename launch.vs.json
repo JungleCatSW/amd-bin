@@ -3,49 +3,12 @@
   "defaults": {},
   "configurations": [
     {
-      "args": [
-        "{\\\"query\\\":true,\\\"command\\\":false,\\\"pretty\\\":true,\\\"nvidia\\\":true,\\\"gpuClock\\\":-100,\\\"memClock\\\":-100,\\\"powerLimit\\\":105}"
-      ],
-      "name": "A-> Query NVIDIA",
+      "args": ["Filename" ],
+      "name": "A-> AMD-BIN",
       "project": "CMakeLists.txt",
-      "projectTarget": "cgi.exe (Debug\\cgi.exe)",
+      "projectTarget": "amd-bin.exe (Debug\\amd-bin.exe)",
       "type": "default"
     },
-    {
-      "args": [
-        "{\\\"command\\\":true,\\\"pretty\\\":true,\\\"nvidia\\\":true,\\\"gpuClock\\\":-20,\\\"memClock\\\":-20,\\\"powerLimit\\\":105,\\\"fanSpeed\\\":30}"
-      ],
-      "name": "A-> Command NVIDIA",
-      "project": "CMakeLists.txt",
-      "projectTarget": "cgi.exe (Debug\\cgi.exe)",
-      "type": "default"
-    },
-    {
-      "args": [
-        "{\\\"query\\\":true,\\\"command\\\":false,\\\"pretty\\\":true,\\\"amd\\\":true,\\\"gpuClock\\\":-100,\\\"memClock\\\":210,\\\"powerLimit\\\":105}"
-      ],
-      "name": "A-> Query AMD",
-      "project": "CMakeLists.txt",
-      "projectTarget": "cgi.exe (Debug\\cgi.exe)",
-      "type": "default"
-    },
-    {
-      "args": [
-        "{\\\"query\\\":true,\\\"command\\\":true,\\\"pretty\\\":true,\\\"amd\\\":true,\\\"gpuClock\\\":200,\\\"memClock\\\":200,\\\"powerLimit\\\":-20,\\\"fanSpeed\\\":0}"
-      ],
-      "name": "A-> Command AMD",
-      "project": "CMakeLists.txt",
-      "projectTarget": "cgi.exe (Debug\\cgi.exe)",
-      "type": "default"
-    },
-    {
-      "args": [
-        "{\\\"query\\\":true,\\\"command\\\":false,\\\"pretty\\\":true,\\\"nvidia\\\":true,\\\"gpuClock\\\":-100,\\\"memClock\\\":-100,\\\"powerLimit\\\":105}"
-      ],
-      "type": "default",
-      "project": "CMakeLists.txt",
-      "projectTarget": "nvt.exe (Debug\\nvt.exe)",
-      "name": "A-> Debug NVT"
-    }
+
   ]
 }
