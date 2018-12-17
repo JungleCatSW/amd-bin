@@ -66,9 +66,6 @@ void BinGen::createContext() {
 	if (res != CL_SUCCESS)
 		std::cout << "error" << res << std::endl;
 
-	std::cout << "Platform extensions:" << exts << std::endl;
-
-
 	cl_context_properties props[] = {
 		CL_CONTEXT_PLATFORM,
 		(cl_context_properties)m_platform,
@@ -77,14 +74,64 @@ void BinGen::createContext() {
 	0
 	};
 	
-	cl_context m_context = clCreateContextFromType(props, CL_DEVICE_TYPE_ALL, NULL, NULL, &res);
-	//cl_context m_context = createContext(&cprops, num_gpus, TempDeviceList, nullptr, nullptr, &ret);
-	std::cout << CL_SUCCESS << "   " << res <<  std::endl;
+	m_context = clCreateContextFromType(props, CL_DEVICE_TYPE_ALL, NULL, NULL, &res);	
+
+}
+void BinGen::loadSourceCode() {
+	const char *cryptonightCL =
+#include "./opencl/cryptonight.cl"
+		;
+	const char *blake256CL =
+#include "./opencl/blake256.cl"
+		;
+	const char *groestl256CL =
+#include "./opencl/groestl256.cl"
+		;
+	const char *jhCL =
+#include "./opencl/jh.cl"
+		;
+	const char *wolfAesCL =
+#include "./opencl/wolf-aes.cl"
+		;
+	const char *wolfSkeinCL =
+#include "./opencl/wolf-skein.cl"
+		;
+	const char *fastIntMathV2CL =
+#include "./opencl/fast_int_math_v2.cl"
+		;
+	const char *fastDivHeavyCL =
+#include "./opencl/fast_div_heavy.cl"
+		;
+
+	std::string source_code(cryptonightCL);
+	m_source_code = source_code;
+	m_source_code = std::regex_replace(m_source_code, std::regex("XMRIG_INCLUDE_WOLF_AES"), wolfAesCL);
+	m_source_code = std::regex_replace(m_source_code, std::regex("XMRIG_INCLUDE_WOLF_SKEIN"), wolfSkeinCL);
+	m_source_code = std::regex_replace(m_source_code, std::regex("XMRIG_INCLUDE_JH"), jhCL);
+	m_source_code = std::regex_replace(m_source_code, std::regex("XMRIG_INCLUDE_BLAKE256"), blake256CL);
+	m_source_code = std::regex_replace(m_source_code, std::regex("XMRIG_INCLUDE_GROESTL256"), groestl256CL);
+	m_source_code = std::regex_replace(m_source_code, std::regex("XMRIG_INCLUDE_FAST_INT_MATH_V2"), fastIntMathV2CL);
+	m_source_code = std::regex_replace(m_source_code, std::regex("XMRIG_INCLUDE_FAST_DIV_HEAVY"), fastDivHeavyCL);
+}
+
+void BinGen::buildProgram() {
+	cl_int res;
+	cl_program m_program = clCreateProgramWithSource(m_context, 1, reinterpret_cast<const char**>(&m_source_code), nullptr, &res);
+	if (res != CL_SUCCESS)
+		std::cout << "error" << res << std::endl;
+
+	res = clBuildProgram(m_program, 1, m_device, NULL, NULL, NULL);
+	if(res !=CL_SUCCESS)
+		std::cout << "error" << res << std::endl;
+
+
 
 }
 
 bool BinGen::generateBinary(std::string kernel_path, std::string bin_name) {
+	loadSourceCode();
 	createContext();
+	buildProgram();
 	return false;
 
 }

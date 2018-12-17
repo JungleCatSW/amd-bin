@@ -8,6 +8,7 @@
 #include <CL/cl_ext.h>
 #include <iostream>
 #include <string>
+#include <regex>
 
 class BinGen {
 
@@ -17,8 +18,11 @@ public:
 
 private:
 	void createContext();
+	void loadSourceCode();
 	void buildProgram();
 	cl_platform_id m_platform = NULL;
+	cl_context m_context = NULL;
+	std::string m_source_code;
 };
 
 
