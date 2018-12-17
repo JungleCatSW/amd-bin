@@ -77,6 +77,36 @@ void BinGen::createContext() {
 	m_context = clCreateContextFromType(props, CL_DEVICE_TYPE_ALL, NULL, NULL, &res);	
 
 }
+
+void BinGen::getDevices(){
+    size_t deviceListSize;
+    int res;
+    res = clGetContextInfo(m_context,
+                              CL_CONTEXT_DEVICES,
+                              0,
+                              NULL,
+                              &deviceListSize);
+    if(res != CL_SUCCESS)
+        std::cout << "Error: Getting Context " << std::endl;
+
+    m_devices;
+    m_devices = (cl_device_id *)malloc(deviceListSize);
+
+    if(m_devices == 0)
+        std::cout << "Error: No devices found.\n";
+
+    // Now, get the device list data
+    res = clGetContextInfo(
+            m_context,
+            CL_CONTEXT_DEVICES,
+            deviceListSize,
+            m_devices,
+            NULL);
+    if(res != CL_SUCCESS)
+        std::cout << "Error: Getting Context Info (device list, clGetContextInfo)\n" << std::endl;
+
+}
+
 void BinGen::loadSourceCode() {
 	const char *cryptonightCL =
 #include "./opencl/cryptonight.cl"
@@ -120,7 +150,7 @@ void BinGen::buildProgram() {
 	if (res != CL_SUCCESS)
 		std::cout << "error" << res << std::endl;
 
-	res = clBuildProgram(m_program, 1, m_device, NULL, NULL, NULL);
+	res = clBuildProgram(m_program, 1, m_devices[0], NULL, NULL, NULL);
 	if(res !=CL_SUCCESS)
 		std::cout << "error" << res << std::endl;
 
@@ -131,6 +161,7 @@ void BinGen::buildProgram() {
 bool BinGen::generateBinary(std::string kernel_path, std::string bin_name) {
 	loadSourceCode();
 	createContext();
+	getDevices();
 	buildProgram();
 	return false;
 
