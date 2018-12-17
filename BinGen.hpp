@@ -24,7 +24,8 @@ private:
 	cl_platform_id m_platform = NULL;
 	cl_context m_context = NULL;
 	std::string m_source_code;
-    cl_device_id        *m_devices;
+    cl_device_id *m_devices;
+	cl_device_id m_device;
 };
 
 

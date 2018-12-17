@@ -105,6 +105,8 @@ void BinGen::getDevices(){
     if(res != CL_SUCCESS)
         std::cout << "Error: Getting Context Info (device list, clGetContextInfo)\n" << std::endl;
 
+	m_device = m_devices[0];
+
 }
 
 void BinGen::loadSourceCode() {
@@ -145,12 +147,42 @@ void BinGen::loadSourceCode() {
 }
 
 void BinGen::buildProgram() {
-	cl_int res;
-	cl_program m_program = clCreateProgramWithSource(m_context, 1, reinterpret_cast<const char**>(&m_source_code), nullptr, &res);
+	size_t deviceListSize;
+	int res;
+	res = clGetContextInfo(m_context,
+		CL_CONTEXT_DEVICES,
+		0,
+		NULL,
+		&deviceListSize);
+	if (res != CL_SUCCESS)
+		std::cout << "Error: Getting Context " << std::endl;
+
+	m_devices;
+	m_devices = (cl_device_id *)malloc(deviceListSize);
+
+	if (m_devices == 0)
+		std::cout << "Error: No devices found.\n";
+
+	// Now, get the device list data
+	res = clGetContextInfo(
+		m_context,
+		CL_CONTEXT_DEVICES,
+		deviceListSize,
+		m_devices,
+		NULL);
+	if (res != CL_SUCCESS)
+		std::cout << "Error: Getting Context Info (device list, clGetContextInfo)\n" << std::endl;
+
+	//m_device = m_devices[0];
+
+
+	//cl_int res;
+	const char* src = m_source_code.c_str();
+	cl_program m_program = clCreateProgramWithSource(m_context, 1, reinterpret_cast<const char**>(&src), nullptr, &res);
 	if (res != CL_SUCCESS)
 		std::cout << "error" << res << std::endl;
 
-	res = clBuildProgram(m_program, 1, m_devices[0], NULL, NULL, NULL);
+	res = clBuildProgram(m_program, 1, m_devices, NULL, NULL, NULL);
 	if(res !=CL_SUCCESS)
 		std::cout << "error" << res << std::endl;
 
