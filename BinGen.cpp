@@ -175,6 +175,20 @@ void BinGen::buildProgram() {
 
 	//m_device = m_devices[0];
 
+	char options[512] = { 0 };
+	snprintf(options, sizeof(options), "-DITERATIONS=%u -DMASK=%u -DWORKSIZE=%zu -DSTRIDED_INDEX=%d -DMEM_CHUNK_EXPONENT=%d -DCOMP_MODE=%d -DMEMORY=%zu "
+									   "-DALGO=%d -DUNROLL_FACTOR=%d -DOPENCL_DRIVER_MAJOR=%d",
+			 0x80000, //iter
+			 0x1FFFF0,
+			 8,
+			 2,
+			 static_cast<int>(1u << m_ctx->memChunk),
+			 m_ctx->compMode,
+			 xmrig::cn_select_memory(algo),
+			 static_cast<int>(algo),
+			 m_ctx->unrollFactor,
+			 amdDriverMajorVersion()
+	);
 
 	//cl_int res;
 	const char* src = m_source_code.c_str();
@@ -185,8 +199,6 @@ void BinGen::buildProgram() {
 	res = clBuildProgram(m_program, 1, m_devices, NULL, NULL, NULL);
 	if(res !=CL_SUCCESS)
 		std::cout << "error" << res << std::endl;
-
-
 
 }
 
