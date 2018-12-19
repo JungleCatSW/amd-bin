@@ -21,11 +21,16 @@ private:
 	void loadSourceCode();
 	void buildProgram();
 	void getDevices();
+	void programInfo();
+	void save();
 	cl_platform_id m_platform = NULL;
 	cl_context m_context = NULL;
 	std::string m_source_code;
     cl_device_id *m_devices;
 	cl_device_id m_device;
+    cl_program m_program;
+
+    unsigned int m_device_list_size; // number of devices from context
 };
 
 
